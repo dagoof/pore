@@ -46,27 +46,30 @@ func TestTop(t *testing.T) {
 }
 
 func TestHeap(t *testing.T) {
-	top_ints := NewHeap(MaxInt)
+	h := NewHeap(MaxInt)
+	ints := []int{3, 6, 2, 8, 13, 4}
 
-	top_ints.Push(3)
-	top_ints.Push(6)
-	top_ints.Push(2)
-	top_ints.Push(8)
-	top_ints.Push(13)
-	top_ints.Push(4)
+	for _, n := range ints {
+		h.Push(n)
+	}
 
-	if len(top_ints.All()) != 6 {
+	if len(h.All()) != 6 {
 		t.Fatal("heap should grow as items are pushed")
 	}
 
-	if top_ints.Pop().(int) != 13 {
-		t.Fatal("first int should be 13")
+	var a, b int
+	a = 1000
+
+	for i := 0; i < len(ints); i++ {
+		b = h.Pop().(int)
+		if b > a {
+			t.Fatal("ints are not in order")
+		}
+		a = b
 	}
 
-	top_ints.Pop()
-
-	if len(top_ints.All()) != 4 {
-		t.Fatal("heap should shrink as items are popped")
+	if len(h.All()) != 0 {
+		t.Fatal("heap should shrink as items are popped", h)
 	}
 
 }

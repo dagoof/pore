@@ -15,8 +15,3 @@ type container struct {
 func (c *container) All() []interface{} {
 	return c.xs
 }
-
-type Container interface {
-	Push(interface{})
-	Pop() interface{}
-}
