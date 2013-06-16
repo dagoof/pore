@@ -11,16 +11,17 @@ type Heap struct {
 
 func (h *Heap) Push(v interface{}) {
 	defer h.c.Signal()
-
 	h.c.L.Lock()
 	defer h.c.L.Unlock()
 
-	for i := 0; i < len(h.xs); i++ {
-		if h.fn(v, h.xs[i]) {
-			v, h.xs[i] = h.xs[i], v
-		}
-	}
 	h.xs = append(h.xs, v)
+	c := len(h.xs) - 1
+	m := (c - 1) / 2
+	for (c > 0) && h.fn(h.xs[c], h.xs[m]) {
+		h.xs[c], h.xs[m] = h.xs[m], h.xs[c]
+		c = m
+		m = (m - 1) / 2
+	}
 }
 
 // Blocks while heap is empty
@@ -28,12 +29,39 @@ func (h *Heap) Pop() interface{} {
 	h.c.L.Lock()
 	defer h.c.L.Unlock()
 
+	// Wait for push signal
 	for len(h.xs) < 1 {
 		h.c.Wait()
 	}
 
 	val := h.xs[0]
-	h.xs = h.xs[1:]
+
+	// Swap head and resize
+	var a, b, c, ln int
+	ln = len(h.xs) - 1
+	h.xs[c] = h.xs[ln]
+	h.xs = h.xs[:ln]
+
+	for {
+		// child addresses
+		a = c*2 + 1
+		b = a + 1
+
+		if !(a < ln) {
+			break
+		}
+		// Find child to swap with
+		if b < ln && h.fn(h.xs[b], h.xs[a]) {
+			a = b
+		}
+		// See if we should swap
+		if !h.fn(h.xs[a], h.xs[c]) {
+			break
+		}
+		// swap and continue
+		h.xs[a], h.xs[c] = h.xs[c], h.xs[a]
+		c = a
+	}
 	return val
 }
 

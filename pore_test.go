@@ -6,6 +6,18 @@ import (
 	"time"
 )
 
+func BenchmarkHeap(b *testing.B) {
+	h := NewHeap(MaxInt)
+	n := b.N
+
+	for i := 0; i < n; i++ {
+		h.Push(rand.Int())
+	}
+	for i := 0; i < n; i++ {
+		h.Pop()
+	}
+}
+
 func TestTop(t *testing.T) {
 	top_five := NewTop(MaxInt, 5)
 
