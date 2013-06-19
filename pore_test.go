@@ -18,33 +18,6 @@ func BenchmarkHeap(b *testing.B) {
 	}
 }
 
-func TestTop(t *testing.T) {
-	top_five := NewTop(MaxInt, 5)
-
-	top_five.Push(3)
-	top_five.Push(6)
-	top_five.Push(2)
-	top_five.Push(8)
-	top_five.Push(13)
-	top_five.Push(4)
-
-	if len(top_five.All()) != 5 {
-		t.Fatal("Size should be limited to 5")
-	}
-
-	if top_five.Pop().(int) != 13 {
-		t.Fatal("top int should be 13")
-	}
-
-	top_five.Pop()
-	top_five.Pop()
-	top_five.Pop()
-	top_five.Pop()
-	if len(top_five.All()) != 5 {
-		t.Fatal("Size should be maintained despite pops")
-	}
-}
-
 func TestHeap(t *testing.T) {
 	h := NewHeap(MaxInt)
 	ints := []int{3, 6, 2, 8, 13, 4}
