@@ -8,7 +8,7 @@ func MaxInt(a, b interface{}) bool {
 			return _a > _b
 		}
 	}
-	return true
+	return false
 }
 
 func MinInt(a, b interface{}) bool {
@@ -17,5 +17,5 @@ func MinInt(a, b interface{}) bool {
 			return _a < _b
 		}
 	}
-	return true
+	return false
 }
